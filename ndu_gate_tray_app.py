@@ -1,11 +1,9 @@
 import enum
-import os
 import sys
 from PyQt5 import QtWidgets, QtGui
-from PyQt5.QtCore import QSize
-from PyQt5.QtWidgets import QFileDialog, QMainWindow, QLabel, QLineEdit, QPushButton
+from PyQt5.QtWidgets import QFileDialog
 
-from ndu_gate_camera.ndu_camera import daemon_with_conf
+from ndu_gate_service_wrapper import ServiceWrapper
 
 
 class ServiceState(enum.Enum):
@@ -22,7 +20,7 @@ class NDUGateTrayApplication(QtWidgets.QSystemTrayIcon):
 
         self.activated.connect(self.on_tray_icon_activated)
 
-        self.service = None
+        self.service = ServiceWrapper()
         self.config_file = None
         self.state = ServiceState.Stopped
 
@@ -67,6 +65,7 @@ class NDUGateTrayApplication(QtWidgets.QSystemTrayIcon):
         if self.state is ServiceState.Stopped:
             pass
 
+        self.service.stop()
         self.state = ServiceState.Stopped
         if show_message:
             self.showMessage('NDU Gate', 'Service stopped')
@@ -76,9 +75,8 @@ class NDUGateTrayApplication(QtWidgets.QSystemTrayIcon):
         if self.state is ServiceState.Started:
             pass
 
-        # if self.config_file is not None:
-        #     self.service.start(self.config_file)
-        daemon_with_conf(self.config_file)
+        if self.config_file is not None:
+            self.service.start(self.config_file)
 
         self.state = ServiceState.Started
         self.showMessage('NDU Gate', 'Service started')
