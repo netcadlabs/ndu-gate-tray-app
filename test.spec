@@ -6,11 +6,7 @@ block_cipher = None
 a = Analysis(['ndu-gate-manager\\app.py'],
              pathex=['C:\\Users\\mythb\\Desktop\\CODE\\ndu-gate-tray-app'],
              binaries=[],
-             datas=[
-                ('ndu-gate-manager\\icons\\app_icon.ico', '.'),
-                ('ndu-gate-manager\\config\\', 'config'),
-                ('ndu-gate-manager\\icons\\', 'icons')
-             ],
+             datas=[],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],
@@ -25,13 +21,12 @@ exe = EXE(pyz,
           a.scripts,
           [],
           exclude_binaries=True,
-          name='NDUGateApp',
-          debug=True,
+          name='test',
+          debug=False,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
-          icon='ndu-gate-manager\\icons\\app_icon.ico',
-          console=False )
+          console=True )
 coll = COLLECT(exe,
                a.binaries,
                a.zipfiles,
@@ -39,4 +34,4 @@ coll = COLLECT(exe,
                strip=False,
                upx=True,
                upx_exclude=[],
-               name='NDUGateApp')
+               name='test')

@@ -1,0 +1,10 @@
+result_handler:
+  device: "DEVICE-1"
+  type: SOCKET # FILE, SOCKET
+  socket:
+    port: 60060
+    host: 127.0.0.1
+
+instances:
+
+

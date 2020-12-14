@@ -15,6 +15,10 @@ pyinstaller app.spec
 
 * pyinstaller -n "NDUGateApp" --onefile --noconsole app.py
 
+pyinstaller --onefile --windowed --noconsole -n "NDUGateApp" app.py
+
+pyinstaller --nowindow .\app.spec
+
 ### Resources
 
 * [Packaging PyQt5 & PySide2 applications for Windows, with PyInstaller - by Martin Fitzpatrick](https://www.learnpyqt.com/tutorials/packaging-pyqt5-pyside2-applications-windows-pyinstaller/)

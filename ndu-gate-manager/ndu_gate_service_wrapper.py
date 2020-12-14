@@ -1,6 +1,6 @@
 import logging
 import sys
-from os import path, listdir, mkdir, curdir
+from os import path
 
 from ndu_gate_camera import NDUCameraService
 from ndu_gate_camera.camera.ndu_logger import NDULoggerHandler
@@ -10,7 +10,7 @@ from ndu_gate_camera.utility.constants import DEFAULT_HANDLER_SETTINGS
 from yaml import safe_load
 
 
-class ServiceWrapper:
+class NDUGateServiceWrapper:
     def __init__(self):
         self.ndu_gate_config = {}
         self.instances = []
@@ -58,13 +58,15 @@ class ServiceWrapper:
             result_hand_conf = DEFAULT_HANDLER_SETTINGS
 
         if str(result_hand_conf.get("type", "SOCKET")) == str("SOCKET"):
-            result_handler = ResultHandlerSocket(result_hand_conf.get("socket", {}), result_hand_conf.get("device", None))
+            result_handler = ResultHandlerSocket(result_hand_conf.get("socket", {}),
+                                                 result_hand_conf.get("device", None))
         else:
             result_handler = ResultHandlerFile(result_hand_conf.get("file_path", None))
 
-        if len(self.ndu_gate_config.get("instances")) > 0:
-            for instance in self.ndu_gate_config.get("instances"):
-                camera_service = NDUCameraService(instance=instance, config_dir=ndu_gate_config_dir, handler=result_handler, is_main_thread=False)
+        if self.ndu_gate_config.get("instances", None) is not None > 0:
+            for instance in self.ndu_gate_config.get("instances", []):
+                camera_service = NDUCameraService(instance=instance, config_dir=ndu_gate_config_dir,
+                                                  handler=result_handler, is_main_thread=False)
                 camera_service.start()
                 self.instances.append(camera_service)
                 log.info("NDU-Gate an instance started")
