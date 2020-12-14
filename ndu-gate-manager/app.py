@@ -13,7 +13,8 @@ from ndu_gate_camera.camera.result_handlers.result_handler_file import ResultHan
 from ndu_gate_camera.camera.result_handlers.result_handler_socket import ResultHandlerSocket
 from ndu_gate_camera.utility.constants import DEFAULT_HANDLER_SETTINGS
 from yaml import safe_load
-
+from tendo import singleton
+from tendo.singleton import SingleInstanceException
 
 class ServiceState(enum.Enum):
     Started = 1
@@ -203,6 +204,13 @@ def main():
 
     ndu_gate_tray_app = NDUGateTrayApplication(QtGui.QIcon(icon_path("app_icon.png")), w)
     ndu_gate_tray_app.show()
+
+    try:
+        singleton.SingleInstance()
+    except SingleInstanceException as e:
+        ndu_gate_tray_app.setToolTip("App already running...")
+        sys.exit(-1)
+
     code = app.exec_()
     sys.exit(code)
 

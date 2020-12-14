@@ -1,24 +1,24 @@
 # NDUGate Service Tray Application
 
-## Features
+## Features
 
-* [x] Start - Stop service
+* [x] Start - Stop the ndu-gate service
 * [x] Select config file
 * [ ] Start at system startup
+* [ ] Prevent multiple instance of the app running
+* [ ] Logging
 
 
-## Building
+## Building
 
 ```
-pyinstaller app.spec
-```
-
-* pyinstaller -n "NDUGateApp" --onefile --noconsole app.py
-
-pyinstaller --onefile --windowed --noconsole -n "NDUGateApp" app.py
-
 pyinstaller --nowindow .\app.spec
+```
 
+--- 
 ### Resources
 
 * [Packaging PyQt5 & PySide2 applications for Windows, with PyInstaller - by Martin Fitzpatrick](https://www.learnpyqt.com/tutorials/packaging-pyqt5-pyside2-applications-windows-pyinstaller/)
+* [InstallForge to prepare windows installation](https://installforge.net/)
+* [Manage the Programs Run at Windows Startup](https://www.akadia.com/services/windows_registry.html)
+* [tendo - prevent multiple instance of app running](https://github.com/pycontribs/tendo)
