@@ -1,6 +1,5 @@
 import logging
-import sys
-from os import path
+from sys import path
 
 from ndu_gate_camera import NDUCameraService
 from ndu_gate_camera.camera.ndu_logger import NDULoggerHandler
@@ -9,20 +8,17 @@ from ndu_gate_camera.camera.result_handlers.result_handler_socket import ResultH
 from ndu_gate_camera.utility.constants import DEFAULT_HANDLER_SETTINGS
 from yaml import safe_load
 
+from service_manager.services.service_wrapper import ServiceState, ServiceWrapper
 
-class NDUGateServiceWrapper:
+
+class NDUGateServiceWrapper(ServiceWrapper):
     def __init__(self):
+        super().__init__()
         self.ndu_gate_config = {}
         self.instances = []
 
-    def stop(self):
-        if len(self.instances) > 0:
-            for instance in self.instances:
-                instance.exit_signal()
-                instance.join()
-
-            self.instances = []
-            print("All instances stopped!")
+    def set_config(self, config={}):
+        pass
 
     def start(self, ndu_gate_config_file: str):
         self.ndu_gate_config = {}
@@ -30,7 +26,7 @@ class NDUGateServiceWrapper:
 
         if not path.isfile(ndu_gate_config_file):
             print('config parameter is not a file : ', ndu_gate_config_file)
-            sys.exit(2)
+            exit(2)
 
         print("Using config file : {}".format(ndu_gate_config_file))
         with open(ndu_gate_config_file, encoding="utf-8") as general_config:
@@ -71,5 +67,16 @@ class NDUGateServiceWrapper:
                 self.instances.append(camera_service)
                 log.info("NDU-Gate an instance started")
             log.info("NDU-Gate all instances are started")
+            self.state = ServiceState.Started
         else:
             log.error("NDUCameraService no source found!")
+
+    def stop(self):
+        if len(self.instances) > 0:
+            for instance in self.instances:
+                instance.exit_signal()
+                instance.join()
+
+            self.instances = []
+            print("All instances stopped!")
+        self.state = ServiceState.Stopped
