@@ -8,11 +8,11 @@ class ServiceWrapper(ABC):
         self.state = ServiceState.Stopped
 
     @abstractmethod
-    def start(self):
+    def start(self, config_file: str):
         pass
 
     @abstractmethod
-    def set_config(self, config={}):
+    def set_config(self, config):
         pass
 
     @abstractmethod
@@ -26,4 +26,3 @@ class ServiceWrapper(ABC):
 class ServiceState(enum.Enum):
     Started = 1
     Stopped = 2
-

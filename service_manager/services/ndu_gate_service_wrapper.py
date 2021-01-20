@@ -17,23 +17,23 @@ class NDUGateServiceWrapper(ServiceWrapper):
         self.ndu_gate_config = {}
         self.instances = []
 
-    def set_config(self, config={}):
-        pass
-
-    def start(self, ndu_gate_config_file: str):
+    def set_config(self, config_file={}):
         self.ndu_gate_config = {}
         self.instances = []
 
-        if not path.isfile(ndu_gate_config_file):
-            print('config parameter is not a file : ', ndu_gate_config_file)
+        if not path.isfile(config_file):
+            print('config parameter is not a file : ', config_file)
             exit(2)
 
-        print("Using config file : {}".format(ndu_gate_config_file))
-        with open(ndu_gate_config_file, encoding="utf-8") as general_config:
+        print("Using config file : {}".format(config_file))
+        with open(config_file, encoding="utf-8") as general_config:
             self.ndu_gate_config = safe_load(general_config)
 
-        ndu_gate_config_dir = path.dirname(path.abspath(ndu_gate_config_file)) + path.sep
+    def start(self, config_file: str):
+        if config_file is not None:
+            self.set_config(config_file)
 
+        ndu_gate_config_dir = path.dirname(path.abspath(config_file)) + path.sep
         logging_config_file = ndu_gate_config_dir + "logs.conf"
         try:
             import platform

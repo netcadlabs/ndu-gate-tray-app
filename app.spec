@@ -3,13 +3,13 @@
 block_cipher = None
 
 
-a = Analysis(['ndu-gate-manager\\app.py'],
+a = Analysis(['service_manager\\app.py'],
              pathex=['C:\\Users\\mythb\\Desktop\\CODE\\ndu-gate-tray-app'],
              binaries=[],
              datas=[
-                ('ndu-gate-manager\\icons\\app_icon.ico', '.'),
-                ('ndu-gate-manager\\config\\', 'config'),
-                ('ndu-gate-manager\\icons\\', 'icons')
+                ('service_manager\\icons\\app_icon.ico', '.'),
+                ('service_manager\\config\\', 'config'),
+                ('service_manager\\icons\\', 'icons')
              ],
              hiddenimports=[],
              hookspath=[],
@@ -30,7 +30,7 @@ exe = EXE(pyz,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
-          icon='ndu-gate-manager\\icons\\app_icon.ico',
+          icon='service_manager\\icons\\app_icon.ico',
           console=False )
 coll = COLLECT(exe,
                a.binaries,

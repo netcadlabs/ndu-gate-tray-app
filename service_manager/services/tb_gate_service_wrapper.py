@@ -2,11 +2,11 @@ from service_manager.services.service_wrapper import ServiceWrapper, ServiceStat
 
 
 class TBGatewayServiceWrapper(ServiceWrapper):
-    def start(self):
+    def start(self, config_file: str):
         self.state = ServiceState.Started
         pass
 
-    def set_config(self, config={}):
+    def set_config(self, config):
         pass
 
     def stop(self):
