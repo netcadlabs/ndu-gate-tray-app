@@ -1,5 +1,5 @@
 import logging
-from sys import path
+import os
 
 from ndu_gate_camera import NDUCameraService
 from ndu_gate_camera.camera.ndu_logger import NDULoggerHandler
@@ -18,10 +18,11 @@ class NDUGateServiceWrapper(ServiceWrapper):
         self.instances = []
 
     def set_config(self, config_file={}):
+        self.config_file = config_file
         self.ndu_gate_config = {}
         self.instances = []
 
-        if not path.isfile(config_file):
+        if not os.path.isfile(config_file):
             print('config parameter is not a file : ', config_file)
             exit(2)
 
@@ -29,11 +30,8 @@ class NDUGateServiceWrapper(ServiceWrapper):
         with open(config_file, encoding="utf-8") as general_config:
             self.ndu_gate_config = safe_load(general_config)
 
-    def start(self, config_file: str):
-        if config_file is not None:
-            self.set_config(config_file)
-
-        ndu_gate_config_dir = path.dirname(path.abspath(config_file)) + path.sep
+    def start(self):
+        ndu_gate_config_dir = os.path.dirname(os.path.abspath(self.config_file)) + os.path.sep
         logging_config_file = ndu_gate_config_dir + "logs.conf"
         try:
             import platform
@@ -67,9 +65,10 @@ class NDUGateServiceWrapper(ServiceWrapper):
                 self.instances.append(camera_service)
                 log.info("NDU-Gate an instance started")
             log.info("NDU-Gate all instances are started")
-            self.state = ServiceState.Started
         else:
             log.error("NDUCameraService no source found!")
+
+        self.state = ServiceState.Started
 
     def stop(self):
         if len(self.instances) > 0:

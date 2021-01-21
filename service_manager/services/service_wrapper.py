@@ -6,13 +6,14 @@ class ServiceWrapper(ABC):
 
     def __init__(self):
         self.state = ServiceState.Stopped
+        self.config_file = None
 
     @abstractmethod
-    def start(self, config_file: str):
+    def start(self):
         pass
 
     @abstractmethod
-    def set_config(self, config):
+    def set_config(self, config_file):
         pass
 
     @abstractmethod
