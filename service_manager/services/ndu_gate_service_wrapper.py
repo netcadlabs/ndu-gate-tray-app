@@ -12,8 +12,8 @@ from service_manager.services.service_wrapper import ServiceState, ServiceWrappe
 
 
 class NDUGateServiceWrapper(ServiceWrapper):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, config_file: str = None):
+        super().__init__(config_file)
         self.ndu_gate_config = {}
         self.instances = []
 

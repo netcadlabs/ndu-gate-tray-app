@@ -10,6 +10,10 @@ from tendo.singleton import SingleInstanceException
 from service_manager.services.ndu_gate_service_wrapper import NDUGateServiceWrapper
 from service_manager.services.service_wrapper import ServiceState
 from service_manager.services.tb_gate_service_wrapper import TBGatewayServiceWrapper
+from service_manager.utils.cache_helper import check_temp_folder, create_service_files, set_service_setting, \
+    get_service_setting
+
+CONFIG_FILE_KEY = 'config_file'
 
 
 class NDUGateTrayApplication(QtWidgets.QSystemTrayIcon):
@@ -19,12 +23,12 @@ class NDUGateTrayApplication(QtWidgets.QSystemTrayIcon):
 
         self.service_registry = {
             'ndu-gate': {
-                'service': NDUGateServiceWrapper(),
+                'service': NDUGateServiceWrapper(get_service_setting('ndu-gate', CONFIG_FILE_KEY)),
                 'name': 'NDU-Gate Camera Service',
                 'icon': 'ndu_gate_icon.png'
             },
             'tb-gate': {
-                'service': TBGatewayServiceWrapper(),
+                'service': TBGatewayServiceWrapper(get_service_setting('tb-gate', CONFIG_FILE_KEY)),
                 'name': 'Thingsboard Gateway Service',
                 'icon': 'tb_gate_icon.png'
             }
@@ -48,6 +52,9 @@ class NDUGateTrayApplication(QtWidgets.QSystemTrayIcon):
             config_action = ndu_gate_menu.addAction("Set Config File")
             config_action.triggered.connect(functools.partial(self.set_config, instance_name))
             config_action.setIcon(QtGui.QIcon(icon_path("config.jpg")))
+            config_file = self.service_registry[instance_name]['service'].config_file
+            if config_file is not None:
+                config_action.setText('Change Config File')
 
             restart_action = ndu_gate_menu.addAction("Restart")
             restart_action.setVisible(False)
@@ -99,7 +106,7 @@ class NDUGateTrayApplication(QtWidgets.QSystemTrayIcon):
                 self.__set_ui_control_visible(instance, 'start_action', True)
 
             config_file = self.service_registry[instance]['service'].config_file
-            if config_file:
+            if config_file is not None:
                 self.service_ui_controls[instance]['config_action'].setToolTip(config_file)
                 self.__set_ui_control_text(instance, 'config_action', 'Change Config File')
             else:
@@ -166,6 +173,7 @@ class NDUGateTrayApplication(QtWidgets.QSystemTrayIcon):
             None, 'Select config', 'C:\\', "Config File (*.yml *.yaml)")
         if selected_file:
             self.service_registry[instance_name]['service'].set_config(selected_file)
+            set_service_setting(instance_name, CONFIG_FILE_KEY, selected_file)
 
         self._update_ui()
 
@@ -190,6 +198,9 @@ def main():
         ndu_gate_tray_app.setToolTip("App already running...")
         print(e)
         sys.exit(-1)
+
+    check_temp_folder()
+    create_service_files(ndu_gate_tray_app.service_registry.keys())
 
     code = app.exec_()
     sys.exit(code)

@@ -4,9 +4,11 @@ from abc import ABC, abstractmethod
 
 class ServiceWrapper(ABC):
 
-    def __init__(self):
+    def __init__(self, config_file: str = None):
         self.state = ServiceState.Stopped
         self.config_file = None
+        if config_file is not None:
+            self.config_file = config_file
 
     @abstractmethod
     def start(self):
