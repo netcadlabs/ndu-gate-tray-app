@@ -3,7 +3,7 @@
 ## Features
 
 * [x] Start - Stop the ndu-gate service
-* [ ] Start - Stop the thingsboard gateway service
+* [x] Start - Stop the thingsboard gateway service
 * [x] Select and set config files
 * [ ] Start at system startup
 * [ ] Prevent multiple instances of the app running

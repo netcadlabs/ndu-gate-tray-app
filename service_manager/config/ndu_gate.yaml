@@ -6,5 +6,29 @@ result_handler:
     host: 127.0.0.1
 
 instances:
-
+  - source:
+      type: CAMERA
+      device: "CAMERA-1-TEST"
+      # file_path: some_file_name.mp4 #pedestrians
+      # image_path: some_image_name.jpg
+      # data_folder: /folder-for-video-files
+      # replay: False # not implemented
+      # show_preview: False
+      # write_preview: False
+      # max_frame_dim:
+      # write_preview_file_name: /file-for-video-file-to-write.mp4
+      # frame_send_interval: 500
+      # frame_send: True
+      # mirror: True
+      # sleep: 0.1 # ??
+      # cam_gear_options:
+      #   CAP_PROP_FRAME_WIDTH: 320
+      #   CAP_PROP_FRAME_HEIGHT: 240
+      #   CAP_PROP_FPS: 10
+    runners:
+      - name: yolov5m - Object detection with 80 classes (Fast)
+        type: yolov5m
+        configuration: yolov5m.json
+        class: Yolov5mRunner
+        priority: 10
 

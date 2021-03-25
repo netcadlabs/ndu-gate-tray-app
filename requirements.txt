@@ -3,3 +3,4 @@ ndu-gate-camera
 PyYAML~=5.3.1
 tendo~=0.2.15
 opencv-python
+ndu-gateway~=2.6.3

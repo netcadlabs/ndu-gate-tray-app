@@ -11,7 +11,7 @@ from yaml import safe_load
 from service_manager.services.service_wrapper import ServiceState, ServiceWrapper
 
 
-class NDUGateServiceWrapper(ServiceWrapper):
+class NDUGateCameraServiceWrapper(ServiceWrapper):
     def __init__(self, config_file: str = None):
         super().__init__(config_file)
         self.ndu_gate_config = {}
@@ -26,7 +26,7 @@ class NDUGateServiceWrapper(ServiceWrapper):
             print('config parameter is not a file : ', config_file)
             exit(2)
 
-        print("Using config file : {}".format(config_file))
+        print("NDUGateCameraServiceWrapper using config file : {}".format(config_file))
         with open(config_file, encoding="utf-8") as general_config:
             self.ndu_gate_config = safe_load(general_config)
 
@@ -44,8 +44,8 @@ class NDUGateServiceWrapper(ServiceWrapper):
 
         global log
         log = logging.getLogger('service')
-        log.info("NDU-Gate logging config file: %s", logging_config_file)
-        log.info("NDU-Gate logging service level: %s", log.level)
+        log.info("NDU-Gate-Camera logging config file: %s", logging_config_file)
+        log.info("NDU-Gate-Camera logging service level: %s", log.level)
 
         result_hand_conf = self.ndu_gate_config.get("result_handler", None)
         if result_hand_conf is None:
@@ -57,14 +57,16 @@ class NDUGateServiceWrapper(ServiceWrapper):
         else:
             result_handler = ResultHandlerFile(result_hand_conf.get("file_path", None))
 
-        if self.ndu_gate_config.get("instances", None) is not None > 0:
+        if self.ndu_gate_config.get("instances", None) is not None:
+            # TODO - tek instance varsa
             for instance in self.ndu_gate_config.get("instances", []):
+                # TODO - subprocess
                 camera_service = NDUCameraService(instance=instance, config_dir=ndu_gate_config_dir,
                                                   handler=result_handler, is_main_thread=False)
                 camera_service.start()
                 self.instances.append(camera_service)
-                log.info("NDU-Gate an instance started")
-            log.info("NDU-Gate all instances are started")
+                log.info("NDU-Gate-Camera an instance started")
+            log.info("NDU-Gate-Camera all instances are started")
         else:
             log.error("NDUCameraService no source found!")
 

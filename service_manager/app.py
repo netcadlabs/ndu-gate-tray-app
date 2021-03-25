@@ -3,13 +3,14 @@ import sys
 from os import path
 
 from PyQt5 import QtWidgets, QtGui
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QFileDialog
 from tendo import singleton
 from tendo.singleton import SingleInstanceException
 
-from service_manager.services.ndu_gate_service_wrapper import NDUGateServiceWrapper
+from service_manager.services.ndu_gate_camera_service_wrapper import NDUGateCameraServiceWrapper
 from service_manager.services.service_wrapper import ServiceState
-from service_manager.services.tb_gate_service_wrapper import TBGatewayServiceWrapper
+from service_manager.services.ndu_gateway_service_wrapper import NDUGatewayServiceWrapper
 from service_manager.utils.cache_helper import check_temp_folder, create_service_files, set_service_setting, \
     get_service_setting
 
@@ -19,17 +20,17 @@ CONFIG_FILE_KEY = 'config_file'
 class NDUGateTrayApplication(QtWidgets.QSystemTrayIcon):
     def __init__(self, icon, parent=None):
         QtWidgets.QSystemTrayIcon.__init__(self, icon, parent)
-        self.setToolTip(f'NDU Gate Service Manager - 0.2')
+        self.setToolTip(f'NDU Gate Service Manager - 0.3')
 
         self.service_registry = {
-            'ndu-gate': {
-                'service': NDUGateServiceWrapper(get_service_setting('ndu-gate', CONFIG_FILE_KEY)),
+            'ndu-gate-camera': {
+                'service': NDUGateCameraServiceWrapper(get_service_setting('ndu-gate-camera', CONFIG_FILE_KEY)),
                 'name': 'NDU-Gate Camera Service',
                 'icon': 'ndu_gate_icon.png'
             },
-            'tb-gate': {
-                'service': TBGatewayServiceWrapper(get_service_setting('tb-gate', CONFIG_FILE_KEY)),
-                'name': 'Thingsboard Gateway Service',
+            'ndu-gateway': {
+                'service': NDUGatewayServiceWrapper(get_service_setting('ndu-gateway', CONFIG_FILE_KEY)),
+                'name': 'NDU - Thingsboard Gateway Service',
                 'icon': 'tb_gate_icon.png'
             }
         }
@@ -161,6 +162,11 @@ class NDUGateTrayApplication(QtWidgets.QSystemTrayIcon):
         return
 
     def show_message(self, message: str, is_error=False):
+        icon = QIcon(icon_path("notification-info-icon-.png"))
+        if is_error:
+            icon = QIcon(icon_path("notification-error-info-icon-64.png"))
+
+        # self.showMessage(title='NDU Gate', msg=message, icon=icon, msecs=2000)
         self.showMessage('NDU Gate', message)
         message_type: str = is_error if "ERROR" else "DEBUG"
         print("{} - {}".format(message_type, message))
