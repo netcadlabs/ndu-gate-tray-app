@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['service_manager\\app.py'],
-             pathex=['C:\\Users\\mythb\\Desktop\\CODE\\ndu-gate-tray-app'],
+             pathex=['C:\\Users\\Netcad\\Desktop\\CODE\\ndu-gate-tray-app'],
              binaries=[],
              datas=[
                 ('service_manager\\icons\\app_icon.ico', '.'),
